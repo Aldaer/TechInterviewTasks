@@ -1,0 +1,2 @@
+public class QueueTasks {
+}
