@@ -3,6 +3,14 @@ package collections;
 import java.util.*;
 
 public class MapsTasks {
+    /**
+     * @param v   Dividend (may be > or < 0)
+     * @param div Divisor (must be > 0)
+     * @return modulus (0 <= modulus < divisor)
+     */
+    public static int modulus(int v, int div) {
+        return ((v % div) + div) % div;
+    }
 
     static class MyHashMap<K, V> implements Map<K, V> {
         private static class Pair<K, V> {
@@ -34,7 +42,7 @@ public class MapsTasks {
         private int findKeyLocation(Object key, boolean findPlacementPoint) {
             int initialPos = key.hashCode();
             for (int offset = 0; offset < capacity; offset++) {
-                int i = (initialPos + offset) % capacity;
+                int i = modulus(initialPos + offset, capacity);
                 if (kv[i] == null) return findPlacementPoint ? i : NO_OBJECT;
                 if (kv[i].k.equals(key)) return i;
             }
@@ -98,7 +106,7 @@ public class MapsTasks {
 
             List<Pair<K, V>> relocations = new ArrayList<>();
             for (int offset = 1; true; offset++) {
-                int i = (keyLocation + offset) % capacity;
+                int i = modulus(keyLocation + offset, capacity);
                 if (kv[i] == null) break;
                 relocations.add(kv[i]);
                 kv[i] = null;
@@ -142,5 +150,35 @@ public class MapsTasks {
         public Set<Entry<K, V>> entrySet() {
             return Collections.emptySet();
         }
+    }
+
+    static class SubsetSolver {
+        private final Integer[] hashTable;
+
+        SubsetSolver(Set<Integer> setT) {
+            this.hashTable = new Integer[setT.size() * 2];
+            for (Integer t : setT) {
+                for (int offset = 0; offset < hashTable.length; offset++) {
+                    int i = modulus(t + offset, hashTable.length);
+                    if (hashTable[i] == null) {
+                        hashTable[i] = t;
+                        break;
+                    }
+                }
+            }
+        }
+
+        boolean containsSet(Set<Integer> setS) {
+            for (Integer s : setS) {
+                for (int offset = 0; offset < hashTable.length; offset++) {
+                    int i = modulus(s + offset, hashTable.length);
+                    if (hashTable[i] == null)
+                        return false;
+                    if (hashTable[i].equals(s)) break;
+                }
+            }
+            return true;
+        }
+
     }
 }
