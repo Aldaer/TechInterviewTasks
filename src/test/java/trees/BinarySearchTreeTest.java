@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class BinarySearchTreeTest {
 
     private final Map<Character, BinarySearchTreeNode<Integer>> nodes = new HashMap<>();
-    private BinarySearchTreeNode<Integer> root;
+    private final BinarySearchTree<Integer> tree = new BinarySearchTree<>();
 
     @Before
     public void setUp() throws Exception {
@@ -20,7 +20,6 @@ public class BinarySearchTreeTest {
             nodes.put(c, new BinarySearchTreeNode<>(0));
         }
 
-        root = nodes.get('A');
         nodes.get('A').left = nodes.get('B');
         nodes.get('B').left = nodes.get('C');
         nodes.get('B').right = nodes.get('D');
@@ -35,32 +34,41 @@ public class BinarySearchTreeTest {
         nodes.get('E').value = 9;
         nodes.get('F').value = 11;
         nodes.get('G').value = 10;
+
+        tree.root = nodes.get('A');
     }
 
     @Test
     public void isValidBST() throws Exception {
-        assertTrue(root.isThisAValidBST());
+        assertTrue(tree.root.isThisAValidBST());
 
         nodes.get('E').left = new BinarySearchTreeNode<>(6);
-        assertFalse(root.isThisAValidBST());
+        assertFalse(tree.root.isThisAValidBST());
 
         nodes.get('E').left.value = 8;
-        assertTrue(root.isThisAValidBST());
+        assertTrue(tree.root.isThisAValidBST());
     }
 
     @Test
     public void traverseNodesLessThan() throws Exception {
         Set<Integer> foundNodes = new HashSet<>();
-        root.traverseNodesLessThan(6, foundNodes::add);
+        tree.root.traverseNodesLessThan(6, foundNodes::add);
 
         Set<Integer> expected = new HashSet<>(Arrays.asList(2, 3, 5));
         assertThat(foundNodes, is(expected));
 
         foundNodes.clear();
-        root.traverseNodesLessThan(11, foundNodes::add);
+        tree.root.traverseNodesLessThan(11, foundNodes::add);
         expected.addAll(Arrays.asList(7, 9, 10));
         assertThat(foundNodes, is(expected));
 
-        root.traverseNodesLessThan(11, System.out::println);
+        tree.root.traverseNodesLessThan(11, System.out::println);
+    }
+
+    @Test
+    public void autoBuildTree() {
+        BinarySearchTree<Integer> newTree = new BinarySearchTree<>();
+        Arrays.asList(9, 3, 5, 2, 11, 10, 7).forEach(newTree::add);
+        assertTrue(newTree.root.isThisAValidBST());
     }
 }

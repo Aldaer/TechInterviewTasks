@@ -16,7 +16,6 @@ class BinarySearchTreeNode<T extends Comparable<T>> {
         this.value = Objects.requireNonNull(value);
     }
 
-
     /**
      * Can be used to check tree constructed by directly assigning nodes
      */
@@ -36,6 +35,25 @@ class BinarySearchTreeNode<T extends Comparable<T>> {
         }
     }
 
+    void add(T newValue) {
+        switch (Integer.signum(newValue.compareTo(value))) {
+            case 0:
+                value = newValue;
+                break;
+            case -1:
+                if (left == null)
+                    left = new BinarySearchTreeNode<>(newValue);
+                else
+                    left.add(newValue);
+                break;
+            case 1:
+                if (right == null)
+                    right = new BinarySearchTreeNode<>(newValue);
+                else
+                    right.add(newValue);
+        }
+    }
+
     private T max() {
         return (right != null) ? right.max() : value;
     }
@@ -43,5 +61,18 @@ class BinarySearchTreeNode<T extends Comparable<T>> {
     private T min() {
         return (left != null) ? left.min() : value;
     }
+
+}
+
+class BinarySearchTree<T extends Comparable<T>> {
+    BinarySearchTreeNode<T> root = null;
+
+    void add(T newValue) {
+        if (root == null)
+            root = new BinarySearchTreeNode<>(newValue);
+        else
+            root.add(newValue);
+    }
+
 
 }

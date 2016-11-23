@@ -7,15 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class BinaryTreeTest {
 
     private final Map<Character, BinaryTreeNode<Character>> nodes = new HashMap<>();
 
-    private BinaryTreeNode<Character> root;
+    private final BinaryTree<Character> tree = new BinaryTree<>();
 
     @Before
     public void setUp() throws Exception {
@@ -23,26 +21,26 @@ public class BinaryTreeTest {
             nodes.put(c, new BinaryTreeNode<>(c));
         }
 
-        root = nodes.get('A');
         nodes.get('A').left = nodes.get('B');
         nodes.get('B').left = nodes.get('C');
         nodes.get('B').right = nodes.get('D');
         nodes.get('A').right = nodes.get('E');
         nodes.get('E').right = nodes.get('F');
+
+        tree.root = nodes.get('A');
     }
 
     @Test
     public void height() throws Exception {
-        final int height = root.height();
-        assertThat(height, is(3));
+        assertThat(tree.height(), is(3));
     }
 
     @Test
     public void isBalanced() throws Exception {
-        assertTrue(root.isBalanced());
+        assertTrue(tree.isBalanced());
 
         nodes.get('F').left = new BinaryTreeNode<>('G');
-        assertFalse(root.isBalanced());
+        assertFalse(tree.isBalanced());
     }
 
 

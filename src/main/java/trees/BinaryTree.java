@@ -12,22 +12,30 @@ class BinaryTreeNode<T> {
         this.value = value;
     }
 
-    int height() {
+    private int height() {
         return max(getSubtreeHeight(left), getSubtreeHeight(right)) + 1;
     }
 
-    boolean isBalanced() {
-        return isSubtreeBalanced(this);
-    }
-
-    private static int getSubtreeHeight(BinaryTreeNode n) {
+    static int getSubtreeHeight(BinaryTreeNode n) {
         return n == null ? 0 : n.height();
     }
 
-    private static boolean isSubtreeBalanced(BinaryTreeNode n) {
+    static boolean isSubtreeBalanced(BinaryTreeNode n) {
         return n == null ||
                 isSubtreeBalanced(n.left) && isSubtreeBalanced(n.right) &&
                         abs(getSubtreeHeight(n.left) - getSubtreeHeight(n.right)) <= 1;
     }
-
 }
+
+class BinaryTree<T> {
+    BinaryTreeNode<T> root = null;
+
+    int height() {
+        return BinaryTreeNode.getSubtreeHeight(root);
+    }
+
+    boolean isBalanced() {
+        return root == null || BinaryTreeNode.isSubtreeBalanced(root);
+    }
+}
+
