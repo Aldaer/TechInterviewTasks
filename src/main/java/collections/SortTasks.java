@@ -2,7 +2,7 @@ package collections;
 
 import java.util.*;
 
-public class SortTasks {
+class SortTasks {
 
     private static <T extends Comparable<T>> List<T> merge(List<T> l1, List<T> l2) {
         final List<T> result = new ArrayList<>(l1.size() + l2.size());

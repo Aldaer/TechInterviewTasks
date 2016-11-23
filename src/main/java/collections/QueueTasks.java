@@ -3,7 +3,7 @@ package collections;
 import java.util.Queue;
 import java.util.Stack;
 
-public class QueueTasks {
+class QueueTasks {
     static <T extends Comparable<T>> T min(Queue<T> queue) {
         T element = queue.poll();
         T min = element;
