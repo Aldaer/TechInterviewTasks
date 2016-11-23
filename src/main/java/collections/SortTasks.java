@@ -1,21 +1,23 @@
 package collections;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 class SortTasks {
 
-    private static <T extends Comparable<T>> List<T> merge(List<T> l1, List<T> l2) {
-        final List<T> result = new ArrayList<>(l1.size() + l2.size());
+    private static <T extends Comparable<T>> List<T> merge(List<T> list1, List<T> list2) {
+        final List<T> result = new ArrayList<>(list1.size() + list2.size());
 
         int i1 = 0;
         int i2 = 0;
-        while (i1 < l1.size() && i2 < l2.size())
-            if (l1.get(i1).compareTo(l2.get(i2)) > 0)
-                result.add(l2.get(i2++));
+        while (i1 < list1.size() && i2 < list2.size())
+            if (list1.get(i1).compareTo(list2.get(i2)) > 0)
+                result.add(list2.get(i2++));
             else
-                result.add(l1.get(i1++));
-        result.addAll(l1.subList(i1, l1.size()));
-        result.addAll(l2.subList(i2, l2.size()));
+                result.add(list1.get(i1++));
+
+        result.addAll(list1.subList(i1, list1.size()));
+        result.addAll(list2.subList(i2, list2.size()));
         return result;
     }
 

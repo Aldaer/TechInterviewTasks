@@ -2,9 +2,7 @@ package collections;
 
 import com.sun.org.apache.xml.internal.utils.IntStack;
 
-import java.util.EmptyStackException;
 import java.util.OptionalInt;
-import java.util.Stack;
 import java.util.stream.IntStream;
 
 class StackTasks {
@@ -35,7 +33,7 @@ class StackTasks {
                 case ']':
                 case ')':
                 case '}':
-                    return (cStack.empty() || opening((char) c) != cStack.pop());
+                    return cStack.empty() || opening((char) c) != cStack.pop();
                 case '[':
                 case '(':
                 case '{':
