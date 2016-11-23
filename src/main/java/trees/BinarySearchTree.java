@@ -2,39 +2,46 @@ package trees;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
-class BinarySearchTreeNode<T extends Comparable<T>>  {
-    private final BiFunction<T, T, T> max = (t1, t2) -> t1.compareTo(t2) > 0? t1 : t2;
-    private final BiFunction<T, T, T> min = (t1, t2) -> t1.compareTo(t2) < 0? t1 : t2;
+class BinarySearchTreeNode<T extends Comparable<T>> {
+    private final BiFunction<T, T, T> max = (t1, t2) -> t1.compareTo(t2) > 0 ? t1 : t2;
+    private final BiFunction<T, T, T> min = (t1, t2) -> t1.compareTo(t2) < 0 ? t1 : t2;
 
-    BinarySearchTreeNode<T> left;
-    BinarySearchTreeNode<T> right;
+    BinarySearchTreeNode<T> left = null;
+    BinarySearchTreeNode<T> right = null;
     T value;
 
-    public BinarySearchTreeNode(T value) {
+    BinarySearchTreeNode(T value) {
         this.value = Objects.requireNonNull(value);
     }
 
-    boolean isValidBST() {
+
+    /**
+     * Can be used to check tree constructed by directly assigning nodes
+     */
+    boolean isThisAValidBST() {
         boolean leftValid = left == null ||
-                left.isValidBST() && value.compareTo(left.max()) > 0;
+                left.isThisAValidBST() && value.compareTo(left.max()) > 0;
         boolean rightValid = right == null ||
-                right.isValidBST() && value.compareTo(right.min()) < 0;
+                right.isThisAValidBST() && value.compareTo(right.min()) < 0;
         return leftValid && rightValid;
     }
 
-    T max() {
-        T maxT = value;
-        if (left != null) maxT = max.apply(maxT, left.max());
-        if (right != null) maxT = max.apply(maxT, right.max());
-        return maxT;
+    void traverseNodesLessThan(T limit, Consumer<T> traverse) {
+        if (left != null) left.traverseNodesLessThan(limit, traverse);
+        if (value.compareTo(limit) < 0) {
+            traverse.accept(value);
+            if (right != null) right.traverseNodesLessThan(limit, traverse);
+        }
     }
 
-    T min() {
-        T minT = value;
-        if (left != null) minT = min.apply(minT, left.min());
-        if (right != null) minT = min.apply(minT, right.min());
-        return minT;
+    private T max() {
+        return (right != null) ? right.max() : value;
+    }
+
+    private T min() {
+        return (left != null) ? left.min() : value;
     }
 
 }
