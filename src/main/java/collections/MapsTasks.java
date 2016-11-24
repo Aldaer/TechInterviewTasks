@@ -2,8 +2,6 @@ package collections;
 
 import java.util.*;
 
-import static java.lang.StrictMath.abs;
-
 class MapsTasks {
     static class MyHashMap<K, V> implements Map<K, V> {
         private static class Pair<K, V> {
@@ -33,7 +31,7 @@ class MapsTasks {
         }
 
         private int findKeyLocation(Object key, boolean findPlacementPoint) {
-            int initialPos = abs(key.hashCode()) % capacity;      // must be non-negative for correct modulus division
+            int initialPos = key.hashCode() % capacity + capacity;      // must be non-negative for correct modulus division
             for (int offset = 0; offset < capacity; offset++) {
                 int i = (initialPos + offset) % capacity;
                 if (kv[i] == null) return findPlacementPoint ? i : NO_OBJECT;
@@ -151,7 +149,7 @@ class MapsTasks {
         SubsetSolver(Set<Integer> setT) {
             this.hashTable = new Integer[setT.size() * 2];
             for (Integer t : setT) {
-                int pos = abs(t) % hashTable.length;
+                int pos = t % hashTable.length + hashTable.length;
                 int i;
                 do {
                     i = pos++ % hashTable.length;
@@ -163,7 +161,7 @@ class MapsTasks {
 
         boolean containsSet(Set<Integer> setS) {
             for (Integer s : setS) {
-                int pos = abs(s) % hashTable.length;
+                int pos = s % hashTable.length + hashTable.length;
                 int i;
                 do {
                     i = pos++ % hashTable.length;
