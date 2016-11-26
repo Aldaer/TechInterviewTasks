@@ -126,7 +126,8 @@ class MapsTasks {
                 @Override
                 public Iterator<K> iterator() {
                     return new Iterator<K>() {
-                        final Iterator<Entry<K,V>> it = es.iterator();
+                        final Iterator<Entry<K, V>> it = es.iterator();
+
                         @Override
                         public boolean hasNext() {
                             return it.hasNext();
@@ -159,7 +160,8 @@ class MapsTasks {
                 @Override
                 public Iterator<V> iterator() {
                     return new Iterator<V>() {
-                        final Iterator<Entry<K,V>> it = es.iterator();
+                        final Iterator<Entry<K, V>> it = es.iterator();
+
                         @Override
                         public boolean hasNext() {
                             return it.hasNext();
@@ -194,10 +196,10 @@ class MapsTasks {
                         int nextI = findNextNonNull(0);
 
                         private int findNextNonNull(int start) {
-                            int i = start;
-                            while (i < capacity && kv[i] == null)
-                                i++;
-                            return i < capacity ? i : NO_OBJECT;
+                            for (int i = start; i < capacity; i++) {
+                                if (kv[i] != null) return i;
+                            }
+                            return NO_OBJECT;
                         }
 
                         @Override
