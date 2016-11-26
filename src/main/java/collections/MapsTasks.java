@@ -118,28 +118,126 @@ class MapsTasks {
             numEntries = 0;
         }
 
-        /**
-         * Not supported
-         */
         @Override
         public Set<K> keySet() {
-            throw new UnsupportedOperationException("keySet()");
+            return new AbstractSet<K>() {
+                final Set<Entry<K, V>> es = entrySet();
+
+                @Override
+                public Iterator<K> iterator() {
+                    return new Iterator<K>() {
+                        final Iterator<Entry<K,V>> it = es.iterator();
+                        @Override
+                        public boolean hasNext() {
+                            return it.hasNext();
+                        }
+
+                        @Override
+                        public K next() {
+                            return it.next().getKey();
+                        }
+
+                        @Override
+                        public void remove() {
+                            it.remove();
+                        }
+                    };
+                }
+
+                @Override
+                public int size() {
+                    return es.size();
+                }
+            };
         }
 
-        /**
-         * Not supported
-         */
         @Override
         public Collection<V> values() {
-            throw new UnsupportedOperationException("values()");
+            return new AbstractCollection<V>() {
+                final Set<Entry<K, V>> es = entrySet();
+
+                @Override
+                public Iterator<V> iterator() {
+                    return new Iterator<V>() {
+                        final Iterator<Entry<K,V>> it = es.iterator();
+                        @Override
+                        public boolean hasNext() {
+                            return it.hasNext();
+                        }
+
+                        @Override
+                        public V next() {
+                            return it.next().getValue();
+                        }
+
+                        @Override
+                        public void remove() {
+                            it.remove();
+                        }
+                    };
+                }
+
+                @Override
+                public int size() {
+                    return es.size();
+                }
+            };
         }
 
-        /**
-         * Not supported
-         */
         @Override
         public Set<Entry<K, V>> entrySet() {
-            throw new UnsupportedOperationException("entrySet()");
+            return new AbstractSet<Entry<K, V>>() {
+                @Override
+                public Iterator<Entry<K, V>> iterator() {
+
+                    return new Iterator<Entry<K, V>>() {
+                        int nextI = findNextNonNull(0);
+
+                        private int findNextNonNull(int start) {
+                            int i = start;
+                            while (i < capacity && kv[i] == null)
+                                i++;
+                            return i < capacity ? i : NO_OBJECT;
+                        }
+
+                        @Override
+                        public boolean hasNext() {
+                            return nextI != NO_OBJECT;
+                        }
+
+                        @Override
+                        public Entry<K, V> next() {
+                            if (!hasNext()) throw new NoSuchElementException();
+                            final int i = nextI;
+                            nextI = findNextNonNull(this.nextI + 1);
+
+                            return new Entry<K, V>() {
+                                @Override
+                                public K getKey() {
+                                    return kv[i].k;
+                                }
+
+                                @Override
+                                public V getValue() {
+                                    return kv[i].v;
+                                }
+
+                                @Override
+                                public V setValue(V value) {
+                                    V oldValue = getValue();
+                                    kv[i] = new Pair<>(getKey(), value);
+                                    return oldValue;
+                                }
+                            };
+                        }
+                    };
+                }
+
+                @Override
+                public int size() {
+                    return numEntries;
+                }
+            };
         }
     }
 
