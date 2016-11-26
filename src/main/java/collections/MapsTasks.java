@@ -123,7 +123,7 @@ class MapsTasks {
          */
         @Override
         public Set<K> keySet() {
-            return Collections.emptySet();
+            throw new UnsupportedOperationException("keySet()");
         }
 
         /**
@@ -131,7 +131,7 @@ class MapsTasks {
          */
         @Override
         public Collection<V> values() {
-            return Collections.emptyList();
+            throw new UnsupportedOperationException("values()");
         }
 
         /**
@@ -139,7 +139,7 @@ class MapsTasks {
          */
         @Override
         public Set<Entry<K, V>> entrySet() {
-            return Collections.emptySet();
+            throw new UnsupportedOperationException("entrySet()");
         }
     }
 
