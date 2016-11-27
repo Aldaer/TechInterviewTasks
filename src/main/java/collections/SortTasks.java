@@ -62,13 +62,6 @@ class HeapSorter<T extends Comparable<T>> {
         heapSize = a.length;
     }
 
-    private void bubbleUp(int pos) {
-        int parent = (pos - 1) / 2;
-        if (a[pos].compareTo(a[parent]) <= 0) return;
-        swap(pos, parent);
-        if (parent > 0) bubbleUp(parent);
-    }
-
     private void sinkDown(int pos) {
         int left = pos * 2 + 1;
         if (left >= heapSize) return;
@@ -93,9 +86,9 @@ class HeapSorter<T extends Comparable<T>> {
     }
 
     private void sort() {
-        // Heapify: O(n ln n)
-        for (int i = 1; i < heapSize; i++)
-            bubbleUp(i);
+        // Improved heapify: O(n) (Floyd's method)
+        for (int i = heapSize / 2 - 1; i >= 0 ; i--)
+            sinkDown(i);
 
         // Swap root, sink down new root to reinstate heap: O(n ln n) 
         while (heapSize > 1) {
