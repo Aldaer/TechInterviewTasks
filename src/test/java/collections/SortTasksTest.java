@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 
 public class SortTasksTest {
@@ -22,6 +22,11 @@ public class SortTasksTest {
     @Test
     public void bubbleSort() throws Exception {
         assertThat(SortTasks.bubbleSort(unsorted), is(sorted));
+    }
+
+    @Test
+    public void heapSort() throws Exception {
+        assertThat(HeapSorter.sort(unsorted), is(sorted));
     }
 
 }

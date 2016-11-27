@@ -1,6 +1,7 @@
 package collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class SortTasks {
@@ -49,4 +50,79 @@ class SortTasks {
         bubbleSort(input.subList(0, lastChange));
         return input;
     }
+
+}
+
+class HeapSorter<T extends Comparable<T>>  {
+    private final T[] a;
+    private int heapSize;
+
+    private HeapSorter(T[] a) {
+        this.a = a;
+        heapSize = a.length;
+    }
+
+    private static int parent(int pos) {
+        return (pos + 1) / 2 - 1;
+    }
+
+    private static int left(int pos) {
+        return (pos + 1) * 2 - 1;
+    }
+
+    private static int right(int pos) {
+        return (pos + 1) * 2;
+    }
+
+    private void bubbleUp(int pos) {
+        int parent = parent(pos);
+        if (a[pos].compareTo(a[parent]) <= 0) return;
+        swap(pos, parent);
+        if (parent > 0) bubbleUp(parent);
+    }
+
+    private void sinkDown(int pos) {
+        int left = left(pos);
+        if (left >= heapSize) return;
+
+        int right = left + 1;
+        int maxIndex;
+        if (right < heapSize && a[left].compareTo(a[right]) < 0)
+            maxIndex = right;
+        else
+            maxIndex = left;
+
+        if (a[pos].compareTo(a[maxIndex]) >= 0) return;
+
+        swap(pos, maxIndex);
+        sinkDown(maxIndex);
+    }
+
+    private void swap(int i, int j) {
+        T x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+
+    private void sort() {
+        // Heapify: O(n ln n)
+        for (int i = 1; i < heapSize; i++)
+            bubbleUp(i);
+
+        // Swap root, sink down new root to reinstate heap: O(n ln n) 
+        while (heapSize > 1) {
+            heapSize--;
+            swap(0, heapSize);
+            sinkDown(0);
+        }
+    }
+
+    static <T extends Comparable<T>> List<T> sort(List<T> input) {
+        @SuppressWarnings("unchecked")
+        T[] sorter = (T[]) input.toArray();
+        new HeapSorter<T>(sorter).sort();
+        return Arrays.asList(sorter);
+    }
+
+
 }
