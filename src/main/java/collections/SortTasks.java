@@ -53,7 +53,7 @@ class SortTasks {
 
 }
 
-class HeapSorter<T extends Comparable<T>>  {
+class HeapSorter<T extends Comparable<T>> {
     private final T[] a;
     private int heapSize;
 
@@ -62,27 +62,15 @@ class HeapSorter<T extends Comparable<T>>  {
         heapSize = a.length;
     }
 
-    private static int parent(int pos) {
-        return (pos + 1) / 2 - 1;
-    }
-
-    private static int left(int pos) {
-        return (pos + 1) * 2 - 1;
-    }
-
-    private static int right(int pos) {
-        return (pos + 1) * 2;
-    }
-
     private void bubbleUp(int pos) {
-        int parent = parent(pos);
+        int parent = (pos - 1) / 2;
         if (a[pos].compareTo(a[parent]) <= 0) return;
         swap(pos, parent);
         if (parent > 0) bubbleUp(parent);
     }
 
     private void sinkDown(int pos) {
-        int left = left(pos);
+        int left = pos * 2 + 1;
         if (left >= heapSize) return;
 
         int right = left + 1;
