@@ -1,6 +1,7 @@
 package collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class SortTasks {
@@ -49,4 +50,60 @@ class SortTasks {
         bubbleSort(input.subList(0, lastChange));
         return input;
     }
+
+}
+
+class HeapSorter<T extends Comparable<T>> {
+    private final T[] a;
+    private int heapSize;
+
+    private HeapSorter(T[] a) {
+        this.a = a;
+        heapSize = a.length;
+    }
+
+    private void sinkDown(int pos) {
+        int left = pos * 2 + 1;
+        if (left >= heapSize) return;
+
+        int right = left + 1;
+        int maxIndex;
+        if (right < heapSize && a[left].compareTo(a[right]) < 0)
+            maxIndex = right;
+        else
+            maxIndex = left;
+
+        if (a[pos].compareTo(a[maxIndex]) >= 0) return;
+
+        swap(pos, maxIndex);
+        sinkDown(maxIndex);
+    }
+
+    private void swap(int i, int j) {
+        T x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+
+    private void sort() {
+        // Improved heapify: O(n) (Floyd's method)
+        for (int i = heapSize / 2 - 1; i >= 0 ; i--)
+            sinkDown(i);
+
+        // Swap root, sink down new root to reinstate heap: O(n ln n) 
+        while (heapSize > 1) {
+            heapSize--;
+            swap(0, heapSize);
+            sinkDown(0);
+        }
+    }
+
+    static <T extends Comparable<T>> List<T> sort(List<T> input) {
+        @SuppressWarnings("unchecked")
+        T[] sorter = (T[]) input.toArray();
+        new HeapSorter<T>(sorter).sort();
+        return Arrays.asList(sorter);
+    }
+
+
 }
